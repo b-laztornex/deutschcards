@@ -6,9 +6,11 @@ import 'package:german_card/ui/flipcard_text.dart';
 import 'package:german_card/config/constants.dart';
 
 class FlipCard extends StatefulWidget {
-  FlipCard({Key key, this.title, this.element}) : super(key: key);
+  FlipCard({Key key, this.title, this.element, this.onUpdateScore})
+      : super(key: key);
   final String title;
   final CardItem element;
+  final Function onUpdateScore;
 
   @override
   _FlipCardState createState() => _FlipCardState();
@@ -18,11 +20,8 @@ class _FlipCardState extends State<FlipCard> {
   bool _cardFlip = false;
 
   pointValidation(String currentWord, String expectedWord) {
-    if( currentWord == expectedWord ){
-
-    }else{
-      
-    }
+    if (currentWord == expectedWord) {
+    } else {}
     // Put your code here, which you want to execute on onPress event.
   }
 
@@ -31,9 +30,9 @@ class _FlipCardState extends State<FlipCard> {
     final _random = new Random();
 
     for (var i = 0; i < 6; i++) {
-      int random_value =
+      int randomValue =
           0 + _random.nextInt(AppConstants().translations.length - 0);
-      values.add(AppConstants().translations[random_value]);
+      values.add(AppConstants().translations[randomValue]);
     }
     // We call the function
     return values;
@@ -47,7 +46,6 @@ class _FlipCardState extends State<FlipCard> {
   @override
   Widget build(BuildContext context) {
     List<String> options = getWords();
-    print(widget.element.translation);
     options.add(widget.element.translation);
 
     return GestureDetector(
@@ -59,7 +57,6 @@ class _FlipCardState extends State<FlipCard> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.blue[100],
         child: !_cardFlip
             ? Center(
                 child: Column(
@@ -82,18 +79,32 @@ class _FlipCardState extends State<FlipCard> {
                         children: options
                             .map(
                               (word) => Container(
-                                child: FlatButton(
-                                  onPressed: pointValidation(
+                                margin: EdgeInsets.all(5.0),
+                                child: RaisedButton(
+                                  onPressed: () => widget.onUpdateScore(
                                       word, widget.element.translation),
-                                  child: Text(
-                                    "$word",
+                                  textColor: Colors.white,
+                                  child: Container(
+                                    color: Colors.lightBlueAccent,
+                                    /* decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: <Color>[
+                                          Color(0xFF0D47A1),
+                                          Color(0xFF1976D2),
+                                          Color(0xFF42A5F5),
+                                        ],
+                                      ),
+                                    ),*/
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Text('$word',
+                                        style: TextStyle(fontSize: 20)),
                                   ),
                                 ),
                               ),
                             )
                             .toList(),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )
