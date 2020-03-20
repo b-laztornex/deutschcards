@@ -16,6 +16,16 @@ class AppConstants {
         'verben', 'Vestir algo, vestir a alguien, vestirse', 'vestirse', 'https://i.picsum.photos/id/901/200/300.jpg'),
   ];
 
+  List<String> levels = [
+    "A1.1",
+    "A1.2",
+    "A2.1",
+    "A2.2",
+    "B1.1",
+    "B1.2",
+    "B1.3",
+  ];
+
   List<String> translations = [
     "ser",
     "ver",

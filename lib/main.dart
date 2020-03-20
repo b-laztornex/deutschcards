@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:german_card/ui/screens/home/index.dart';
+import 'package:german_card/ui/screens/levels/A1.1/index.dart';
+import 'package:german_card/ui/screens/selection/index.dart';
 
 void main() => runApp(MyApp());
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -23,9 +26,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+        '/': (context) => HomePage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/second': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+        '/selection': (context) => Selection(),
+        '/A1.1': (context) => A11(),
       },
     );
   }

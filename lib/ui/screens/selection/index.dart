@@ -4,7 +4,7 @@ import 'package:german_card/config/constants.dart';
 import 'package:german_card/ui/flipcard.dart';
 
 class Selection extends StatefulWidget {
-  Selection({Key key, this.title}) : super(key: key);
+  Selection({Key key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -14,8 +14,6 @@ class Selection extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
-  final String title;
 
   @override
   _SelectionState createState() => _SelectionState();
@@ -51,14 +49,14 @@ class _SelectionState extends State<Selection> {
       appBar: AppBar(
         // Here we take the value from the Selection object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text("title"),
       ),
       body: Container(
         child: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
           child: FlipCard(
-            title: widget.title,
+            title: "title",
             element: element,
             onUpdateScore: _updateScore,
           ),
