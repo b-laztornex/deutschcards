@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:german_card/model/card.dart';
+import 'package:german_card/model/verb_model.dart';
 import 'package:german_card/ui/flipcard_text.dart';
 import 'package:german_card/config/constants.dart';
 
@@ -9,7 +9,7 @@ class FlipCard extends StatefulWidget {
   FlipCard({Key key, this.title, this.element, this.onUpdateScore})
       : super(key: key);
   final String title;
-  final CardItem element;
+  final VerbModel element;
   final Function onUpdateScore;
 
   @override
@@ -46,7 +46,9 @@ class _FlipCardState extends State<FlipCard> {
   @override
   Widget build(BuildContext context) {
     List<String> options = getWords();
-    options.add(widget.element.translation);
+    List<String> meaning = widget.element.translation.split(',');
+    options.add(meaning[0]);
+    options.shuffle();
 
     return GestureDetector(
       onTap: () {
@@ -66,14 +68,18 @@ class _FlipCardState extends State<FlipCard> {
                     FlipCardText(
                         title: 'Infinitiv: ',
                         verb: '${widget.element.infinitiv}'),
+                    SizedBox(height: 10.0),
                     FlipCardText(
-                        title: 'Präsens: ', verb: '${widget.element.presens}'),
+                        title: 'Präsens: ', verb: '${widget.element.present}'),
+                    SizedBox(height: 10.0),
                     FlipCardText(
                         title: 'Präteritum: ',
-                        verb: '${widget.element.preteritum}'),
+                        verb: '${widget.element.preterite}'),
+                    SizedBox(height: 10.0),
                     FlipCardText(
                         title: 'Partizip II: ',
-                        verb: '${widget.element.partizip}'),
+                        verb: '${widget.element.perfect}'),
+                    SizedBox(height: 10.0),
                     Expanded(
                       child: Wrap(
                         children: options
@@ -81,20 +87,11 @@ class _FlipCardState extends State<FlipCard> {
                               (word) => Container(
                                 margin: EdgeInsets.all(5.0),
                                 child: RaisedButton(
+                                  color: Colors.lightBlueAccent,
                                   onPressed: () => widget.onUpdateScore(
-                                      word, widget.element.translation),
+                                      word, meaning[0]),
                                   textColor: Colors.white,
                                   child: Container(
-                                    color: Colors.lightBlueAccent,
-                                    /* decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: <Color>[
-                                          Color(0xFF0D47A1),
-                                          Color(0xFF1976D2),
-                                          Color(0xFF42A5F5),
-                                        ],
-                                      ),
-                                    ),*/
                                     padding: EdgeInsets.all(10.0),
                                     child: Text('$word',
                                         style: TextStyle(fontSize: 20)),

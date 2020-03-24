@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:german_card/db/database_utils.dart';
 import 'package:german_card/ui/screens/home/index.dart';
-import 'package:german_card/ui/screens/levels/A1.1/index.dart';
+import 'package:german_card/ui/screens/level/index.dart';
 import 'package:german_card/ui/screens/selection/index.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseUtils().initDatabase();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/selection': (context) => Selection(),
-        '/A1.1': (context) => A11(),
+        '/level': (context) => Level(),
       },
     );
   }

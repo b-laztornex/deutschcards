@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   // Navigate to the second screen using a named route.
 
-                  Navigator.pushNamed(context, '/$lvl');
+                  Navigator.pushNamed(context, '/level');
                 },
                 child: Padding(
                   padding: EdgeInsets.all(5.0),

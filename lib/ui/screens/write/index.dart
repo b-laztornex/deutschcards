@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:german_card/model/verb_model.dart';
 import 'package:german_card/ui/flipcard.dart';
 
-class Selection extends StatefulWidget {
-  Selection({Key key}) : super(key: key);
+class Write extends StatefulWidget {
+  Write({Key key}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -14,10 +14,10 @@ class Selection extends StatefulWidget {
   // always marked "final".
 
   @override
-  _SelectionState createState() => _SelectionState();
+  _WriteState createState() => _WriteState();
 }
 
-class _SelectionState extends State<Selection> {
+class _WriteState extends State<Write> {
   int _counter = 0;
   int _score = 0;
 
@@ -46,7 +46,7 @@ class _SelectionState extends State<Selection> {
     VerbModel element = verbs[_counter];
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the Selection object that was created by
+        // Here we take the value from the Write object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("title"),
       ),
