@@ -40,24 +40,53 @@ class _WriteState extends State<Write> {
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     List<VerbModel> verbs = ModalRoute.of(context).settings.arguments;
     VerbModel element = verbs[_counter];
+    var txt = TextEditingController();
+    List<String> el = element.infinitiv.split("");
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the Write object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("title"),
+        title: Text("Write"),
       ),
       body: Container(
         child: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
-          child: FlipCard(
-            title: "title",
-            element: element,
-            onUpdateScore: _updateScore,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  controller: txt,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+                ListView.builder(
+                  itemCount: el.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RaisedButton(
+                      onPressed: () {},
+                      child: Text(
+                        '${el[index]}',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

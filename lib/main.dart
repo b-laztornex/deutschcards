@@ -3,6 +3,7 @@ import 'package:german_card/db/database_utils.dart';
 import 'package:german_card/ui/screens/home/index.dart';
 import 'package:german_card/ui/screens/level/index.dart';
 import 'package:german_card/ui/screens/selection/index.dart';
+import 'package:german_card/ui/screens/write/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/selection': (context) => Selection(),
         '/level': (context) => Level(),
+        '/write': (context) => Write(),
       },
     );
   }
