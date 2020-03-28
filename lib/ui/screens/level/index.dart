@@ -24,7 +24,6 @@ class _LevelState extends State<Level> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     DatabaseUtils.getVerbs("a11").then((val) {

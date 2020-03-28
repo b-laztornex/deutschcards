@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:german_card/model/verb_model.dart';
+import 'package:german_card/model/word_model.dart';
 import 'package:german_card/ui/flipcard.dart';
 
 class Write extends StatefulWidget {
-  Write({Key key}) : super(key: key);
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+  final List<VerbModel> verbs;
+  Write({Key key, this.verbs}) : super(key: key);
   @override
   _WriteState createState() => _WriteState();
 }
@@ -21,49 +14,82 @@ class _WriteState extends State<Write> {
   int _counter = 0;
   int _score = 0;
 
-  List<String> _infinitiv;
+  List<WordModel> _infinitiv;
+  String _complete_infinitiv;
   List<String> _translation;
   List<VerbModel> _list_verb;
   VerbModel _current_element;
 
-  var txt = TextEditingController();
+  final txt = TextEditingController();
+
+  List<WordModel> generateWordList(element) {
+    List<String> arrayElement = element.infinitiv.split("");
+    arrayElement.shuffle();
+    List<WordModel> arrayLetter = [];
+    arrayElement.asMap().forEach((idx, el) {
+      arrayLetter.add(WordModel(idx, el));
+    });
+    return arrayLetter;
+  }
+
+  void _setWordStatus(WordModel el) {
+    List<WordModel> tmp_infinitiv = _infinitiv;
+    tmp_infinitiv[el.id].pressed = !tmp_infinitiv[el.id].pressed;
+
+    txt.text = txt.text + el.word;
+
+    setState(() {
+      _infinitiv = tmp_infinitiv;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    VerbModel element = widget.verbs[_counter];
+    List<WordModel> arrayWord = generateWordList(element);
+    List<String> translation = element.translation.split(",");
 
-    /*setState(() {
-      _list_verb = verbs;
+    setState(() {
+      _list_verb = widget.verbs;
       _current_element = element;
-      _infinitiv = arrayElement;
+      _infinitiv = arrayWord;
       _translation = translation;
-    });*/
+      _complete_infinitiv = element.infinitiv;
+    });
   }
 
-  void _updateScore(String currentWord, String expectedWord) {
-    if (currentWord == expectedWord) {
-      setState(() {
-        _counter++;
-        _score++;
-      });
-    } else {
-      setState(() {
-        _counter++;
-        _score--;
-      });
-    }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    txt.dispose();
+    super.dispose();
+  }
+
+  void _updateScore() {
+    int count = _counter + 1;
+    int score = _score;
+    VerbModel element = _list_verb[count];
+    List<WordModel> arrayWord = generateWordList(element);
+    List<String> translation = element.translation.split(",");
+
+    score = (_complete_infinitiv == txt.text) ? score + 1 : score - 1;
+    txt.text = '';
+
+    setState(() {
+      _counter++;
+      _score = score;
+      _current_element = element;
+      _infinitiv = arrayWord;
+      _translation = translation;
+      _complete_infinitiv = element.infinitiv;
+    });
   }
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    List<VerbModel> verbs = ModalRoute.of(context).settings.arguments;
-    VerbModel element = verbs[_counter];
-    List<String> arrayElement = element.infinitiv.split("");
-    List<String> translation = element.translation.split(",");
-
-    arrayElement.shuffle();
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the Write object that was created by
@@ -79,7 +105,7 @@ class _WriteState extends State<Write> {
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'What do people call you?',
-                  labelText: 'Name *',
+                  labelText: '',
                 ),
                 controller: txt,
                 validator: (value) {
@@ -94,12 +120,47 @@ class _WriteState extends State<Write> {
               ),
               Center(
                 child: Text(
-                  '${translation[0]}',
+                  '${_translation[0]}',
                   style: TextStyle(fontSize: 38.0),
                 ),
               ),
               SizedBox(
                 height: 60.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.replay),
+                    tooltip: 'Re-try',
+                    onPressed: () {
+                      txt.text = "";
+                      _infinitiv.asMap().forEach((idx, el) {
+                        _infinitiv[idx].pressed = false;
+                      });
+                      setState(() {
+                        _infinitiv = _infinitiv;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    tooltip: 'Delete',
+                    onPressed: () {
+                      setState(() {
+                        //_volume += 10;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.done),
+                    tooltip: 'Continue',
+                    onPressed: _updateScore,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20.0,
               ),
               Expanded(
                 child: GridView.count(
@@ -107,12 +168,14 @@ class _WriteState extends State<Write> {
                   // horizontal, this produces 2 rows.
                   crossAxisCount: 6,
                   // Generate 100 widgets that display their index in the List.
-                  children: arrayElement
+                  children: _infinitiv
                       .map(
-                        (e) => RaisedButton(
-                          onPressed: () {},
+                        (el) => RaisedButton(
+                          color: el.pressed ? Colors.green : Colors.grey,
+                          onPressed: () =>
+                              !el.pressed ? _setWordStatus(el) : null,
                           child: Text(
-                            '$e',
+                            '${el.word}',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
@@ -120,6 +183,7 @@ class _WriteState extends State<Write> {
                       .toList(),
                 ),
               ),
+
               /*ListView.builder(
                 itemCount: el.length,
                 itemBuilder: (BuildContext context, int index) {

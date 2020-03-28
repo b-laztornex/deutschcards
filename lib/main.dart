@@ -30,13 +30,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => HomePage(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/selection': (context) => Selection(),
-        '/level': (context) => Level(),
-        '/write': (context) => Write(),
+      onGenerateRoute: (RouteSettings settings) {
+        print('build route for ${settings.name}');
+        var routes = <String, WidgetBuilder>{
+          '/': (context) => HomePage(),
+          '/selection': (context) => Selection(),
+          '/level': (context) => Level(),
+          '/write': (context) => Write(verbs: settings.arguments),
+        };
+        WidgetBuilder builder = routes[settings.name];
+        return MaterialPageRoute(builder: (context) => builder(context));
       },
     );
   }
