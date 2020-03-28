@@ -21,9 +21,23 @@ class _WriteState extends State<Write> {
   int _counter = 0;
   int _score = 0;
 
+  List<String> _infinitiv;
+  List<String> _translation;
+  List<VerbModel> _list_verb;
+  VerbModel _current_element;
+
+  var txt = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
+    /*setState(() {
+      _list_verb = verbs;
+      _current_element = element;
+      _infinitiv = arrayElement;
+      _translation = translation;
+    });*/
   }
 
   void _updateScore(String currentWord, String expectedWord) {
@@ -46,47 +60,79 @@ class _WriteState extends State<Write> {
   Widget build(BuildContext context) {
     List<VerbModel> verbs = ModalRoute.of(context).settings.arguments;
     VerbModel element = verbs[_counter];
-    var txt = TextEditingController();
-    List<String> el = element.infinitiv.split("");
+    List<String> arrayElement = element.infinitiv.split("");
+    List<String> translation = element.translation.split(",");
 
+    arrayElement.shuffle();
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the Write object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("Write"),
       ),
-      body: Container(
-        child: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  controller: txt,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                decoration: const InputDecoration(
+                  hintText: 'What do people call you?',
+                  labelText: 'Name *',
                 ),
-                ListView.builder(
-                  itemCount: el.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RaisedButton(
-                      onPressed: () {},
-                      child: Text(
-                        '${el[index]}',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    );
-                  },
+                controller: txt,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Center(
+                child: Text(
+                  '${translation[0]}',
+                  style: TextStyle(fontSize: 38.0),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 60.0,
+              ),
+              Expanded(
+                child: GridView.count(
+                  // Create a grid with 2 columns. If you change the scrollDirection to
+                  // horizontal, this produces 2 rows.
+                  crossAxisCount: 6,
+                  // Generate 100 widgets that display their index in the List.
+                  children: arrayElement
+                      .map(
+                        (e) => RaisedButton(
+                          onPressed: () {},
+                          child: Text(
+                            '$e',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              /*ListView.builder(
+                itemCount: el.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return RaisedButton(
+                    onPressed: () {},
+                    child: Text(
+                      '${el[index]}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                },
+              ),*/
+            ],
           ),
         ),
       ),
