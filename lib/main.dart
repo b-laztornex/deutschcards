@@ -4,6 +4,7 @@ import 'package:german_card/ui/screens/home/index.dart';
 import 'package:german_card/ui/screens/level/index.dart';
 import 'package:german_card/ui/screens/selection/index.dart';
 import 'package:german_card/ui/screens/write/index.dart';
+import 'package:german_card/ui/screens/score/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,9 +35,10 @@ class MyApp extends StatelessWidget {
         print('build route for ${settings.name}');
         var routes = <String, WidgetBuilder>{
           '/': (context) => HomePage(),
-          '/selection': (context) => Selection(),
+          '/selection': (context) => Selection(verbs: settings.arguments),
           '/level': (context) => Level(),
           '/write': (context) => Write(verbs: settings.arguments),
+          '/score': (context) => Score(score: settings.arguments),
         };
         WidgetBuilder builder = routes[settings.name];
         return MaterialPageRoute(builder: (context) => builder(context));

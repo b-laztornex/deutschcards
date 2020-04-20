@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:german_card/model/verb_model.dart';
 import 'package:german_card/model/word_model.dart';
-import 'package:german_card/ui/flipcard.dart';
 
 class Write extends StatefulWidget {
   final List<VerbModel> verbs;
@@ -46,12 +45,14 @@ class _WriteState extends State<Write> {
   @override
   void initState() {
     super.initState();
-    VerbModel element = widget.verbs[_counter];
+    List<VerbModel> listVerb = widget.verbs;
+    listVerb.shuffle();
+    VerbModel element = listVerb[_counter];
     List<WordModel> arrayWord = generateWordList(element);
     List<String> translation = element.translation.split(",");
 
     setState(() {
-      _list_verb = widget.verbs;
+      _list_verb = listVerb;
       _current_element = element;
       _infinitiv = arrayWord;
       _translation = translation;
@@ -69,21 +70,27 @@ class _WriteState extends State<Write> {
   void _updateScore() {
     int count = _counter + 1;
     int score = _score;
-    VerbModel element = _list_verb[count];
-    List<WordModel> arrayWord = generateWordList(element);
-    List<String> translation = element.translation.split(",");
+    int len = _list_verb.length;
 
-    score = (_complete_infinitiv == txt.text) ? score + 1 : score - 1;
-    txt.text = '';
+    if (count >= len) {
+      double percentege = score > 0 ? ((score * 100) / len) : 0.0;
+      Navigator.pushNamed(context, '/score', arguments: percentege);
+    } else {
+      VerbModel element = _list_verb[count];
+      List<WordModel> arrayWord = generateWordList(element);
+      List<String> translation = element.translation.split(",");
 
-    setState(() {
-      _counter++;
-      _score = score;
-      _current_element = element;
-      _infinitiv = arrayWord;
-      _translation = translation;
-      _complete_infinitiv = element.infinitiv;
-    });
+      score = (_complete_infinitiv == txt.text) ? score + 1 : score - 1;
+      txt.text = '';
+      setState(() {
+        _counter++;
+        _score = score;
+        _current_element = element;
+        _infinitiv = arrayWord;
+        _translation = translation;
+        _complete_infinitiv = element.infinitiv;
+      });
+    }
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -171,7 +178,7 @@ class _WriteState extends State<Write> {
                   children: _infinitiv
                       .map(
                         (el) => RaisedButton(
-                          color: el.pressed ? Colors.green : Colors.grey,
+                          color: el.pressed ? Colors.green : Colors.grey[200],
                           onPressed: () =>
                               !el.pressed ? _setWordStatus(el) : null,
                           child: Text(

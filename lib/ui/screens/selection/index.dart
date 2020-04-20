@@ -3,27 +3,25 @@ import 'package:german_card/model/verb_model.dart';
 import 'package:german_card/ui/flipcard.dart';
 
 class Selection extends StatefulWidget {
-  Selection({Key key}) : super(key: key);
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  final List<VerbModel> verbs;
+  Selection({Key key, this.verbs}) : super(key: key);
 
   @override
   _SelectionState createState() => _SelectionState();
 }
 
 class _SelectionState extends State<Selection> {
+  List<VerbModel> _verbs;
   int _counter = 0;
   int _score = 0;
 
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      _verbs = widget.verbs;
+    });
   }
 
   void _updateScore(String currentWord, String expectedWord) {
@@ -42,8 +40,7 @@ class _SelectionState extends State<Selection> {
 
   @override
   Widget build(BuildContext context) {
-    List<VerbModel> verbs = ModalRoute.of(context).settings.arguments;
-    VerbModel element = verbs[_counter];
+    VerbModel element = _verbs[_counter];
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the Selection object that was created by
